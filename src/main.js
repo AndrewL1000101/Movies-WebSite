@@ -5,7 +5,7 @@ const api = axios.create({
     },
     params: {
         'api_key': API_KEY,
-        'language': navigator.language || 'es-ES'
+        'language': navigator.language || 'es-CO'
     }
 });
 
@@ -270,3 +270,10 @@ function getLikedMovies(movie) {
 
     createMovies(moviesArray, likedMoviesListArticle, {lazyLoad: true, clean: true});
 };
+
+
+/* 
+Para el deploy debemos quitar del archiuvo gitIgnore el 
+archivo "Private.js" y hacer push al repositorio o subirlo
+al Github Pages
+*/
