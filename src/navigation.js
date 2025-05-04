@@ -1,3 +1,4 @@
+let maxPage;
 let page = 1;
 let infiniteScroll
 searchFormBtn.addEventListener('click', () => {
@@ -85,6 +86,8 @@ function categoriesPage() {
     const newName = categoryName.replace('%20', '');
     headerCategoryTitle.innerHTML = newName;
     getMoviesByCategory(categoryId);
+
+    infiniteScroll = getPaginatedMoviesByCategory(categoryId);
 }
 
 function moviesPage() {
@@ -132,6 +135,7 @@ function searchPage() {
     const [_, query] = location.hash.split('=');
     getMoviesBySearch(query);
     
+    infiniteScroll = getPaginatedMoviesBySearch(query);
 }
 
 function trendsPage() {
