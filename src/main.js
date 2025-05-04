@@ -5,8 +5,33 @@ const api = axios.create({
     },
     params: {
         'api_key': API_KEY,
+        'language': navigator.language || 'es-ES'
     }
 });
+
+function likedMoviesList() {
+    const item = JSON.parse(localStorage.getItem('liked_movies'));
+    let movies;
+
+    if(item) {
+        movies = item;
+    } else {
+        movies = {};
+    }
+    
+    return movies;
+}
+function likeMovie(movie) {
+    const likedMovies = likedMoviesList();
+
+    if (likedMovies[movie.id]) {
+        likedMovies[movie.id] = undefined;
+    } else {
+        likedMovies[movie.id] = movie;
+    };
+
+    localStorage.setItem('liked_movies', JSON.stringify(likedMovies));
+};
 
 //Utils - Helpers
 const lazyLoader = new IntersectionObserver((entries) => {
@@ -49,8 +74,11 @@ function createMovies(
 
         const movieBtn = document.createElement('button');
         movieBtn.classList.add('movie-btn');
+        likedMoviesList()[movie.id] && movieBtn.classList.add('movie-btn--liked');
         movieBtn.addEventListener('click', () => {
-            movieBtn.classList.toggle('movie-btn--liked')
+            movieBtn.classList.toggle('movie-btn--liked');
+            likeMovie(movie);
+            getLikedMovies();
         });
 
         if(lazyLoad) {
@@ -233,4 +261,12 @@ async function getRelatedMoviesId(id) {
     const relatedMovies = data.results;
 
     createMovies(relatedMovies, relatedMoviesContainer);
+};
+
+
+function getLikedMovies(movie) {
+    const likedMovies = likedMoviesList();
+    const moviesArray = Object.values(likedMovies);
+
+    createMovies(moviesArray, likedMoviesListArticle, {lazyLoad: true, clean: true});
 };
